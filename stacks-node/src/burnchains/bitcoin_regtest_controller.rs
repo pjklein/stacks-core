@@ -1800,10 +1800,6 @@ impl BitcoinRegtestController {
         for utxo in available_utxos.into_iter() {
             total_consumed += utxo.amount;
             utxos_set.utxos.push(utxo);
-
-            if total_consumed >= total_target {
-                break;
-            }
         }
 
         if total_consumed < total_target {
@@ -3089,7 +3085,7 @@ mod tests {
                     hex_bytes("76a9141dc27eba0247f8cc9575e7d45e50a0bc7e72427d88ac").unwrap(),
                 )
                 .into_script(),
-                amount: 42051,
+                amount: 62051,
                 confirmations: 1421,
             },
             UTXO {
@@ -3150,7 +3146,7 @@ mod tests {
             &mut signer,
             true
         ));
-        assert_eq!(transaction.output[3].value, 323557);
+        assert_eq!(transaction.output[3].value, 343557);
 
         // test send_block_commit_operation_at_burn_height()
         let utxo_set = UTXOSet {
@@ -3220,12 +3216,12 @@ mod tests {
                 2212,
             )
             .unwrap();
-
+ 
         debug!("send_block_commit_operation:\n{block_commit:#?}");
         debug!("{}", &SerializedTx::new(block_commit.clone()).to_hex());
-        assert_eq!(block_commit.output[3].value, 323507);
+        assert_eq!(block_commit.output[3].value, 343557);
 
-        assert_eq!(&SerializedTx::new(block_commit).to_hex(), "0100000002eeda098987728e4a2e21b34b74000dcb0bd0e4d20e55735492ec3cba3afbead3030000006a4730440220558286e20e10ce31537f0625dae5cc62fac7961b9d2cf272c990de96323d7e2502202255adbea3d2e0509b80c5d8a3a4fe6397a87bcf18da1852740d5267d89a0cb20121035379aa40c02890d253cfa577964116eb5295570ae9f7287cbae5f2585f5b2c7cfdffffff243b0b329a5889ab8801b315eea19810848d4c2133e0245671cc984a2d2f1301000000006a47304402206d9f8de107f9e1eb15aafac66c2bb34331a7523260b30e18779257e367048d34022013c7dabb32a5c281aa00d405e2ccbd00f34f03a65b2336553a4acd6c52c251ef0121035379aa40c02890d253cfa577964116eb5295570ae9f7287cbae5f2585f5b2c7cfdffffff040000000000000000536a4c5054335be88c3d30cb59a142f83de3b27f897a43bbb0f13316911bb98a3229973dae32afd5b9f21bc1f40f24e2c101ecd13c55b8619e5e03dad81de2c62a1cc1d8c1b375000008a300010000059800015a10270000000000001976a914000000000000000000000000000000000000000088ac10270000000000001976a914000000000000000000000000000000000000000088acb3ef0400000000001976a9141dc27eba0247f8cc9575e7d45e50a0bc7e72427d88ac00000000");
+        assert_eq!(&SerializedTx::new(block_commit).to_hex(), "0100000002eeda098987728e4a2e21b34b74000dcb0bd0e4d20e55735492ec3cba3afbead3030000006a47304402206b165cdaeab1121568bf7d1f7851ac3a0073eb6ed0a6dba125fcede8091d862c022053017a4cfc7746ac71ee2f94a9da4830535373c9465b9948e37416cba91030310121035379aa40c02890d253cfa577964116eb5295570ae9f7287cbae5f2585f5b2c7cfdffffff243b0b329a5889ab8801b315eea19810848d4c2133e0245671cc984a2d2f1301000000006a4730440220017121761f1ffe8ec4246b29360074e55247483a30073ccd2cdaad43b1cd5fae0220182072df326b865d8ced5b64f9af45a443e45670f92698dd13c65f8e272ea0670121035379aa40c02890d253cfa577964116eb5295570ae9f7287cbae5f2585f5b2c7cfdffffff040000000000000000536a4c5054335be88c3d30cb59a142f83de3b27f897a43bbb0f13316911bb98a3229973dae32afd5b9f21bc1f40f24e2c101ecd13c55b8619e5e03dad81de2c62a1cc1d8c1b375000008a300010000059800015a10270000000000001976a914000000000000000000000000000000000000000088ac10270000000000001976a914000000000000000000000000000000000000000088ac053e0500000000001976a9141dc27eba0247f8cc9575e7d45e50a0bc7e72427d88ac00000000");
     }
 
     #[test]
