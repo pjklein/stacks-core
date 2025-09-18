@@ -1711,17 +1711,14 @@ impl BitcoinRegtestController {
         signer: &mut BurnchainOpSigner,
         force_change_output: bool,
     ) {
-        // spend UTXOs in order by confirmations.  Spend the least-confirmed UTXO first, and in the
-        // event of a tie, spend the smallest-value UTXO first.
+        // pjklein - I am overriding this locally because I want the replenishment 
+        //  sidecar to be able to send from the standby address to the mining address
+        //  any time standby > mining. I do not want the sidecar script to have to 
+        //  check the relative confirmation counts.  
+        // [ spend UTXOs in order by confirmations.  Spend the least-confirmed UTXO first, and in the
+        //   event of a tie, spend the smallest-value UTXO first.]
         utxos_set.utxos.sort_by(|u1, u2| {
-            if u1.confirmations != u2.confirmations {
-                u1.confirmations.cmp(&u2.confirmations)
-            } else {
-                // for block-commits, the smaller value is likely the UTXO-chained value, so
-                // continue to prioritize it as the first spend in order to avoid breaking the
-                // miner commit chain.
-                u1.amount.cmp(&u2.amount)
-            }
+            u1.amount.cmp(&u2.amount)
         });
 
         let tx_size = {
